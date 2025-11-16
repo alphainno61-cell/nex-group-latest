@@ -72,7 +72,7 @@
                                     <p class="text-xs text-gray-500 mt-1 truncate">{{ $logo->url }}</p>
                                 </div>
                                 <div class="flex gap-2">
-                                    <button onclick="openEditModal({{ $logo->id }}, '{{ addslashes($logo->name) }}', '{{ addslashes($logo->url) }}')" 
+                                    <button onclick="openEditModal({{ $logo->id }}, '{{ addslashes($logo->name) }}', '{{ addslashes($logo->url) }}', '{{ addslashes($logo->redirect_url ?? '') }}')" 
                                             class="flex-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded text-sm">
                                         <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -111,24 +111,19 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="logoUrl">
-                        Image URL
-                    </label>
-                    <input type="url" id="logoUrl" 
-                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <p class="text-xs text-gray-500 mt-1">Enter the full URL of the logo image</p>
-                </div>
-                <div class="mb-4">
-                    <div class="flex items-center justify-center">
-                        <span class="text-gray-500 font-semibold">OR</span>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="logoFile">
-                        Upload Image from Computer
+                        Upload Image
                     </label>
                     <input type="file" id="logoFile" accept="image/*"
                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     <p class="text-xs text-gray-500 mt-1">Choose an image file from your computer</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="redirectUrl">
+                        Redirect URL
+                    </label>
+                    <input type="url" id="redirectUrl" 
+                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <p class="text-xs text-gray-500 mt-1">URL to redirect when the logo is clicked</p>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Preview</label>
@@ -165,24 +160,19 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="addLogoUrl">
-                        Image URL
-                    </label>
-                    <input type="url" id="addLogoUrl" 
-                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <p class="text-xs text-gray-500 mt-1">Enter the full URL of the logo image</p>
-                </div>
-                <div class="mb-4">
-                    <div class="flex items-center justify-center">
-                        <span class="text-gray-500 font-semibold">OR</span>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="addLogoFile">
-                        Upload Image from Computer
+                        Upload Image
                     </label>
                     <input type="file" id="addLogoFile" accept="image/*"
-                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
                     <p class="text-xs text-gray-500 mt-1">Choose an image file from your computer</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="addRedirectUrl">
+                        Redirect URL
+                    </label>
+                    <input type="url" id="addRedirectUrl" 
+                           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <p class="text-xs text-gray-500 mt-1">URL to redirect when the logo is clicked</p>
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Preview</label>
@@ -206,11 +196,11 @@
 
     <script>
         // Edit Modal Functions
-        function openEditModal(id, name, url) {
+        function openEditModal(id, name, url, redirectUrl) {
             document.getElementById('logoId').value = id;
             document.getElementById('logoName').value = name;
-            document.getElementById('logoUrl').value = url;
             document.getElementById('logoFile').value = '';
+            document.getElementById('redirectUrl').value = redirectUrl;
             document.getElementById('logoPreview').src = url;
             document.getElementById('editModal').classList.add('active');
         }
@@ -222,7 +212,7 @@
         // Add Modal Functions
         function openAddModal() {
             document.getElementById('addLogoName').value = '';
-            document.getElementById('addLogoUrl').value = '';
+            document.getElementById('addRedirectUrl').value = '';
             document.getElementById('addLogoFile').value = '';
             document.getElementById('addLogoPreview').src = '';
             document.getElementById('addModal').classList.add('active');
@@ -232,20 +222,7 @@
             document.getElementById('addModal').classList.remove('active');
         }
 
-        // Update preview on URL change
-        document.getElementById('logoUrl').addEventListener('input', function(e) {
-            if (e.target.value) {
-                document.getElementById('logoPreview').src = e.target.value;
-                document.getElementById('logoFile').value = '';
-            }
-        });
-
-        document.getElementById('addLogoUrl').addEventListener('input', function(e) {
-            if (e.target.value) {
-                document.getElementById('addLogoPreview').src = e.target.value;
-                document.getElementById('addLogoFile').value = '';
-            }
-        });
+        // Update preview on URL change - removed
 
         // Handle file upload for Edit
         document.getElementById('logoFile').addEventListener('change', function(e) {
@@ -254,7 +231,6 @@
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     document.getElementById('logoPreview').src = event.target.result;
-                    document.getElementById('logoUrl').value = '';
                 };
                 reader.readAsDataURL(file);
             }
@@ -267,7 +243,6 @@
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     document.getElementById('addLogoPreview').src = event.target.result;
-                    document.getElementById('addLogoUrl').value = '';
                 };
                 reader.readAsDataURL(file);
             }
@@ -278,20 +253,16 @@
             e.preventDefault();
             const id = document.getElementById('logoId').value;
             const name = document.getElementById('logoName').value;
-            const urlInput = document.getElementById('logoUrl').value;
+            const redirectUrl = document.getElementById('redirectUrl').value;
             const fileInput = document.getElementById('logoFile').files[0];
 
             const formData = new FormData();
             formData.append('name', name);
+            formData.append('redirect_url', redirectUrl);
             formData.append('_method', 'PUT');
             
             if (fileInput) {
                 formData.append('image', fileInput);
-            } else if (urlInput) {
-                formData.append('url', urlInput);
-            } else {
-                alert('Please provide either a URL or upload an image');
-                return;
             }
 
             try {
@@ -319,18 +290,17 @@
         document.getElementById('addForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const name = document.getElementById('addLogoName').value;
-            const urlInput = document.getElementById('addLogoUrl').value;
+            const redirectUrl = document.getElementById('addRedirectUrl').value;
             const fileInput = document.getElementById('addLogoFile').files[0];
 
             const formData = new FormData();
             formData.append('name', name);
+            formData.append('redirect_url', redirectUrl);
             
             if (fileInput) {
                 formData.append('image', fileInput);
-            } else if (urlInput) {
-                formData.append('url', urlInput);
             } else {
-                alert('Please provide either a URL or upload an image');
+                alert('Please upload an image');
                 return;
             }
 

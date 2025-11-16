@@ -65,7 +65,7 @@
                     
                     @foreach ($logos as $logo)
                         <div class="logo-container-item">
-                            <a href="{{ $logo['url'] }}" target="_blank">
+                            <a href="{{ $logo['redirect_url'] }}" target="_blank">
                                 <img src="{{ $logo['url'] }}" alt="{{ $logo['name'] }}" class="h-10 w-auto object-contain" onerror="this.src='https://placehold.co/200x60?text={{ urlencode($logo['name']) }}'">
                             </a>
                         </div>

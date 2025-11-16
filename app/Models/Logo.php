@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Logo extends Model
 {
-    protected $fillable = ['name', 'url', 'order'];
+    protected $fillable = ['name', 'url', 'redirect_url', 'order'];
 }

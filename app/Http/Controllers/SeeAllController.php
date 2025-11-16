@@ -23,13 +23,13 @@ class SeeAllController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'url' => 'nullable|url',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'redirect_url' => 'required|url',
         ]);
 
         $lastOrder = Logo::max('order') ?? 0;
         
-        $url = $request->url;
+        $url = null;
         
         // Handle file upload
         if ($request->hasFile('image')) {
@@ -42,6 +42,7 @@ class SeeAllController extends Controller
         $logo = Logo::create([
             'name' => $request->name,
             'url' => $url,
+            'redirect_url' => $request->redirect_url,
             'order' => $lastOrder + 1,
         ]);
 
@@ -52,13 +53,13 @@ class SeeAllController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'url' => 'nullable|url',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'redirect_url' => 'nullable|url',
         ]);
 
         $logo = Logo::findOrFail($id);
         
-        $url = $request->url ?? $logo->url;
+        $url = $logo->url;
         
         // Handle file upload
         if ($request->hasFile('image')) {
@@ -80,6 +81,10 @@ class SeeAllController extends Controller
             'name' => $request->name,
             'url' => $url,
         ]);
+
+        if ($request->filled('redirect_url')) {
+            $logo->update(['redirect_url' => $request->redirect_url]);
+        }
 
         return response()->json(['success' => true, 'logo' => $logo]);
     }
