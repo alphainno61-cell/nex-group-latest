@@ -13,18 +13,21 @@
         .fade-in {
             animation: fadeIn 0.5s ease-out forwards;
         }
+        .sidebar-link:hover {
+            background-color: #e11d48 !important;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen bg-gray-200">
         <!-- Sidebar -->
-        <div class="w-64 bg-rose-500 text-white p-5">
+        <div class="w-64 text-white p-5" style="background-color: #f43f5e;">
             <h2 class="text-2xl font-bold mb-10">Dashboard</h2>
             <nav>
-                <a href="/dashboard" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-rose-600">Home</a>
-                <a href="/admin/see-all" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-rose-600">Companies</a>
-                <a href="/dashboard/welcome" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-rose-600">Settings</a>
-                <a href="/logout" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-rose-600">Logout</a>
+                <a href="/dashboard" class="block py-2.5 px-4 rounded transition duration-200 sidebar-link">Home</a>
+                <a href="/admin/see-all" class="block py-2.5 px-4 rounded transition duration-200 sidebar-link">Companies</a>
+                <a href="/dashboard/welcome" class="block py-2.5 px-4 rounded transition duration-200 sidebar-link">Settings</a>
+                <a href="/logout" class="block py-2.5 px-4 rounded transition duration-200 sidebar-link">Logout</a>
             </nav>
         </div>
         <!-- Main content -->
