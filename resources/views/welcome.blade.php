@@ -22,15 +22,22 @@
             <div class="flex justify-between items-center h-20">
                 <!-- Logo/Brand Name - NEX GROUP (Text Only) -->
                 <a href="#" class="flex items-center space-x-2 transition duration-150 ease-in-out">
-                    <!-- Removed the SVG icon here -->
-                    <span class="text-3xl font-extrabold text-gray-700 tracking-tight">
-                        NEX GROUP
-                    </span>
+                    @if($settings && $settings->logo_image)
+                        <img src="{{ $settings->logo_image }}" alt="{{ $settings->site_title ?? 'NEX GROUP' }}" class="h-12 w-auto object-contain">
+                    @else
+                        <span class="text-3xl font-extrabold text-gray-700 tracking-tight">
+                            {{ $settings->site_title ?? 'NEX GROUP' }}
+                        </span>
+                    @endif
                 </a>
                 
                 <!-- Desktop Navigation - Only Investor Relations remains -->
                 <nav class="hidden md:flex space-x-8">
-                    <a href="#investor" class="text-lg font-medium text-gray-600 hover:text-blue-600 transition duration-150">Investor Relations</a>
+                    @if($settings && $settings->investor_link)
+                        <a href="{{ $settings->investor_link }}" class="text-lg font-medium text-gray-600 hover:text-blue-600 transition duration-150">Investor Relations</a>
+                    @else
+                        <a href="#investor" class="text-lg font-medium text-gray-600 hover:text-blue-600 transition duration-150">Investor Relations</a>
+                    @endif
                 </nav>
 
                 <!-- Mobile Menu Button -->
@@ -45,7 +52,11 @@
         <!-- Mobile Menu (Hidden by default) - Only Investor Relations remains -->
         <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg border-t border-gray-100">
             <div class="pt-2 pb-3 space-y-1 px-4">
-                <a href="#investor" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">Investor Relations</a>
+                @if($settings && $settings->investor_link)
+                    <a href="{{ $settings->investor_link }}" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">Investor Relations</a>
+                @else
+                    <a href="#investor" class="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-blue-600">Investor Relations</a>
+                @endif
             </div>
         </div>
     </header>
@@ -64,29 +75,38 @@
                         <div class="space-y-4">
                             <!-- Large Stylized 'N' (Color is red-600: #dc2626) -->
                             <div class="text-7xl font-extrabold text-white bg-red-600 shadow-xl rounded-xl p-3 h-20 w-20 flex items-center justify-center translate-y-2">
-                                N
+                                {{ $settings->hero_letter ?? 'N' }}
                             </div>
                             <h1 class="text-5xl sm:text-6xl font-light tracking-tight text-gray-900 leading-none">
-                                is for <strong class="font-extrabold">NEX</strong>
+                                {!! $settings->hero_text ?? 'is for <strong class="font-extrabold">NEX</strong>' !!}
                             </h1>
                         </div>
 
                         <!-- Founder Quote -->
                         <div class="max-w-md pt-8">
                             <p class="text-lg text-gray-700 leading-relaxed">
-                                As we outlined in our initial letter, "NEX is not a conventional company. We do not intend to become one." We believe true innovation requires long-term patience and structural freedom.
+                                {{ $settings->hero_description ?? 'As we outlined in our initial letter, "NEX is not a conventional company. We do not intend to become one." We believe true innovation requires long-term patience and structural freedom.' }}
                             </p>
                         </div>
                         
                         <!-- Signature Block -->
                         <div class="pt-8">
-                            <!-- Simplified signature approximation using a custom font style -->
-                            <p class="text-3xl text-gray-900 font-serif" style="font-family: 'Brush Script MT', 'Cursive', sans-serif;">
-                                Engr. Mohammad Shahrair Khan
-                            </p>
+                            @if($settings && $settings->signature_image)
+                                <!-- Display uploaded signature image -->
+                                <div class="mb-4">
+                                    <img src="{{ $settings->signature_image }}" alt="Signature" class="h-16 w-auto object-contain">
+                                </div>
+                            @else
+                                <!-- Simplified signature approximation using a custom font style -->
+                                <p class="text-3xl text-gray-900 font-serif" style="font-family: 'Brush Script MT', 'Cursive', sans-serif;">
+                                    {{ $settings->founder_name ?? 'Engr. Mohammad Shahrair Khan' }}
+                                </p>
+                            @endif
                             <div class="mt-4 border-b border-gray-300 w-48"></div>
-                            <p class="mt-2 text-sm text-gray-500 font-medium">Engr. Mohammad Shahrair Khan</p>
-                            <p class="mt-2 text-sm text-gray-500 font-medium">Research Fellow || APU, Malaysia</p>
+                            <p class="mt-2 text-sm text-gray-500 font-medium">{{ $settings->founder_name ?? 'Engr. Mohammad Shahrair Khan' }}</p>
+                            @if($settings && $settings->founder_title)
+                                <p class="mt-2 text-sm text-gray-500 font-medium">{{ $settings->founder_title }}</p>
+                            @endif
                         </div>
                     </div>
 
