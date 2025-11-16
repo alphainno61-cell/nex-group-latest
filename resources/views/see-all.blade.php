@@ -31,40 +31,6 @@
             filter: grayscale(0%);
             transform: scale(1.1);
         }
-
-        .edit-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-        }
-
-        .logo-container-item:hover .edit-overlay {
-            display: flex;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -99,21 +65,9 @@
                     
                     @foreach ($logos as $logo)
                         <div class="logo-container-item">
-                            <img src="{{ $logo['url'] }}" alt="{{ $logo['name'] }}" class="h-10 w-auto object-contain" onerror="this.src='https://placehold.co/200x60?text={{ urlencode($logo['name']) }}'">
-                            <div class="edit-overlay">
-                                <button onclick="openEditModal({{ $logo['id'] }}, '{{ $logo['name'] }}', '{{ $logo['url'] }}')" class="bg-white text-gray-800 px-4 py-2 rounded hover:bg-gray-100 mx-1">
-                                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                    Edit
-                                </button>
-                                <button onclick="deleteLogo({{ $logo['id'] }})" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 mx-1">
-                                    <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                    Delete
-                                </button>
-                            </div>
+                            <a href="{{ $logo['url'] }}" target="_blank">
+                                <img src="{{ $logo['url'] }}" alt="{{ $logo['name'] }}" class="h-10 w-auto object-contain" onerror="this.src='https://placehold.co/200x60?text={{ urlencode($logo['name']) }}'">
+                            </a>
                         </div>
                     @endforeach
 
@@ -121,100 +75,6 @@
             </main>
 
         </div>
-
-        <!-- Edit Modal -->
-        <div id="editModal" class="modal">
-            <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-                <h2 class="text-2xl font-bold mb-4">Edit Logo</h2>
-                <form id="editForm">
-                    <input type="hidden" id="logoId">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="logoName">
-                            Name
-                        </label>
-                        <input type="text" id="logoName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="logoUrl">
-                            Image URL
-                        </label>
-                        <input type="url" id="logoUrl" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="button" onclick="closeEditModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2">
-                            Cancel
-                        </button>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Save
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <script>
-            function openEditModal(id, name, url) {
-                document.getElementById('logoId').value = id;
-                document.getElementById('logoName').value = name;
-                document.getElementById('logoUrl').value = url;
-                document.getElementById('editModal').classList.add('active');
-            }
-
-            function closeEditModal() {
-                document.getElementById('editModal').classList.remove('active');
-            }
-
-            document.getElementById('editForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const id = document.getElementById('logoId').value;
-                const name = document.getElementById('logoName').value;
-                const url = document.getElementById('logoUrl').value;
-
-                try {
-                    const response = await fetch(`/logos/${id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        },
-                        body: JSON.stringify({ name, url })
-                    });
-
-                    if (response.ok) {
-                        location.reload();
-                    } else {
-                        alert('Failed to update logo');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred');
-                }
-            });
-
-            async function deleteLogo(id) {
-                if (!confirm('Are you sure you want to delete this logo?')) {
-                    return;
-                }
-
-                try {
-                    const response = await fetch(`/logos/${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                        }
-                    });
-
-                    if (response.ok) {
-                        location.reload();
-                    } else {
-                        alert('Failed to delete logo');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred');
-                }
-            }
-        </script>
 
         <!-- Section 3: Footer -->
         <footer class="bg-red-600 text-white shadow-inner">

@@ -22,7 +22,7 @@
         .login-title {
             font-size: 28px;
             font-weight: 700;
-            color: #2d3748;
+            color: #dc2626;
             margin-bottom: 24px;
             text-align: center;
         }
@@ -36,12 +36,12 @@
         }
         .form-input:focus {
             outline: none;
-            border-color: #4a5568;
+            border-color: #ef4444;
         }
         .login-button {
             width: 100%;
             padding: 12px;
-            background-color: #2d3748;
+            background-color: #dc2626;
             color: #ffffff;
             border: none;
             border-radius: 4px;
@@ -50,14 +50,14 @@
             transition: background-color 0.3s ease;
         }
         .login-button:hover {
-            background-color: #4a5568;
+            background-color: #b91c1c;
         }
         .signup-link {
             text-align: center;
             margin-top: 16px;
         }
         .signup-link a {
-            color: #2d3748;
+            color: #dc2626;
             text-decoration: none;
             font-weight: 700;
         }
@@ -87,9 +87,9 @@
             <input type="password" name="password" placeholder="Password" class="form-input" required>
             <button type="submit" class="login-button">Log In</button>
         </form>
-        <div class="signup-link">
+        {{-- <div class="signup-link">
             <p>Don't have an account? <a href="/signup">Sign Up</a></p>
-        </div>
+        </div> --}}
     </div>
 
 </body>
